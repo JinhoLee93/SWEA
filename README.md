@@ -1,2 +1,2 @@
 # SWEA
-Samsung
+Samsung Coding Interview Prep
