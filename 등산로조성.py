@@ -1,4 +1,4 @@
-
+import sys
 class Solution:
     def do(self, test_case, N, K, mat):
         # ROWS = COLS = N, K = Depth
