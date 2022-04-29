@@ -2,57 +2,47 @@ import sys
 
 class Solution:
     def do(self, test_case, D, W, K, mat):
-        # W = COLS, D = ROWS, K = Pass
+        # D = ROWS, W = COLS, K = pass
         ROWS, COLS = D, W
+        def checkFilm(mat):
+            for c in range(COLS):
+                prv, tmpK, complete = mat[0][c], K - 1, False
+                for r in range(1, ROWS):
+                    if complete:
+                        break
+                    if mat[r][c] == prv:
+                        tmpK -= 1
+                        if tmpK <= 0:
+                            complete = True
+                        continue
+                    tmpK = K - 1
+                    prv = mat[r][c]
+                if not complete:
+                    return False
+            return True
+
+        if K == 1 or checkFilm(mat):
+            return f"#{test_case} {0}"
+        chems = [[0] * COLS, [1] * COLS] # A, B
         res = K
-        chems = [[0] * COLS, [1] * COLS]
-
-        if self.check(ROWS, COLS, mat, K) or K == 1:
-
-            return f"#{test_case} 0"
-
-        def backtrack(i, count, mat):
+        def dfs(r, count):
             nonlocal res
-            if i == ROWS:
-                if self.check(ROWS, COLS, mat, K):
+            if r == ROWS and count < res:
+                if checkFilm(mat):
                     res = min(res, count)
-
                 return
-
-            if count < res:
-                for j in range(i, ROWS):
-                    ogRow = mat[j]
+            elif count < res:
+                for newR in range(r, ROWS):
+                    ogRow = mat[newR]
                     for chem in chems:
-                        mat[j] = chem
-                        backtrack(j + 1, count + 1, mat)
-                        mat[j] = ogRow
-                        if count < res:
-                            if self.check(ROWS, COLS, mat, K):
-                                res = min(res, count)
+                        if checkFilm(mat) and count < res:
+                            res = min(res, count)
+                        mat[newR] = chem
+                        dfs(newR + 1, count + 1)
+                        mat[newR] = ogRow
 
-        backtrack(0, 0, mat)
+        dfs(0, 0)
         return f"#{test_case} {res}"
-
-    def check(self, rows, cols, mat, k):
-        for c in range(cols):
-            prv, count, complete = mat[0][c], k - 1, False
-            for r in range(1, rows):
-                if complete:
-                    break
-
-                if prv == mat[r][c]:
-                    count -= 1
-                    if count <= 0:
-                        complete = True
-                    continue
-
-                count = k - 1
-                prv = mat[r][c]
-
-            if not complete:
-                return False
-
-        return True
 
 sys.stdin = open("film_input.txt", "r")
 T = int(input())
