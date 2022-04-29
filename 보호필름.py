@@ -37,6 +37,7 @@ class Solution:
                     for chem in chems:
                         if checkFilm(mat) and count < res:
                             res = min(res, count)
+                            return
                         mat[newR] = chem
                         dfs(newR + 1, count + 1)
                         mat[newR] = ogRow
