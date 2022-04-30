@@ -88,16 +88,16 @@ class Solution:
 
             return hittableBricks
 
-        def dfs(mat, shoots):
+        def dfs(mat, shots):
             if shoots > 0:
                 hittableBricks = getHittable(mat)
                 for r, c in hittableBricks:
                     newMat = [list(mat[r][:]) for r in range(ROWS)]
                     curMat = pullDown(crush(newMat, r, c))
                     countBricks(curMat)
-                    dfs(curMat, shoots - 1)
+                    dfs(curMat, shots - 1)
 
-        dfs(mat, shoots)
+        dfs(mat, shots)
 
         return f"#{T} {minBricks}"
 
